@@ -1,0 +1,17 @@
+[project]
+name = "ccwc"
+version = "0.1.0"
+description = "WC Challenge from Code Challenges"
+readme = "README.md"
+requires-python = ">=3.8.12"
+dependencies = [
+    "chardet==5.2.0",
+    "colorama==0.4.4",
+    "pytest==7.1.1",
+    "pytest-mock==3.14.0",
+    "shellingham==1.5.3",
+    "typer==0.9.4",
+]
+
+[project.scripts]
+ccwc = "ccwc.cli:app"
