@@ -15,3 +15,11 @@ dependencies = [
 
 [project.scripts]
 ccwc = "ccwc.cli:app"
+
+[dependency-groups]
+dev = [
+    "ccwc",
+]
+
+[tool.uv.sources]
+ccwc = { workspace = true }
