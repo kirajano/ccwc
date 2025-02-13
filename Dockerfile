@@ -1,29 +1,69 @@
-FROM python:3.8.12-slim-buster
 
-    # Python
-ENV PYTHONUNBUFFERED=1 \
+########
+# BASE #
+########
+# uv official image
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS base
+
+ENV APP="ccwc" \
+    PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100 \
-    # uv version 0.5.24
-    UV_PACKAGE_MANAGER_GIT="git+https://github.com/astral-sh/uv.git@42fae925c44b99aebbda09d0a2ed7659ce7b8e15" \
-    # Do not use venv but docker python
-    UV_SYSTEM_PYTHON=1
+    PIP_DEFAULT_TIMEOUT=100
 
 RUN apt-get update \
-    && pip install --upgrade pip \
-    && pip install $UV_PACKAGE_MANAGER_GIT \
-    && apt-get clean
+    # apt-get install <pckg1> <pckg2> \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --upgrade pip
 
 WORKDIR /wc_tool
+
+
+########
+# DEV #
+########
+FROM base AS dev
+
+# Initiate project with uv and start virtual environment
+RUN uv init $APP \
+    uv venv \
+    source .venv/bin/activate
+
+# < Adding packages during development >
+#     1. uv add <package==xx.yy.xx>
+#     2. uv lock (after done)
+
+# < Start and develop >
+
+########
+# BUILD #
+########
+FROM base AS build
+
+# < Development Result >
+# py
 COPY ./ccwc/*.py ./ccwc/
 COPY ./tests/*.py ./tests/
+COPY ./tests/test.txt ./tests/test.txt
+# toml
 COPY pyproject.toml .
 
+# Build app
 COPY uv.lock .
-RUN uv sync --no-editable \
-    && uv build --wheel \
-    && uv pip install dist/*.whl
+RUN uv sync --no-editable
+RUN uv build --wheel \
+    && uv pip install dist/*.whl \
+    && rm -r dist build ccwc.egg-info
 
-CMD ["bash"]
+########
+# PROD #
+########
+FROM build as prod
+# Do not use venv but docker python
+ENV UV_SYSTEM_PYTHON=1 
+
+ENTRYPOINT [ "ccwc" ]
+CMD [ "-c", "tests/test.txt" ]
 
 
