@@ -2,7 +2,7 @@
     "name": "ccwc Development",
     "build": {
       "dockerfile": "../Dockerfile",
-      "target": "build",
+      "target": "dev",
       "context": ".."
     },
     "workspaceFolder": "/wc_tool",
