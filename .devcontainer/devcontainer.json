@@ -1,0 +1,28 @@
+{
+    "name": "ccwc Development",
+    "build": {
+      "dockerfile": "../Dockerfile",
+      "target": "build",
+      "context": ".."
+    },
+    "workspaceFolder": "/wc_tool",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/wc_tool,type=bind,consistency=cached",
+    "shutdownAction": "stopContainer",
+    "overrideCommand": true,
+    "customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ClemensPeters.format-json",
+				"mechatroner.rainbow-csv",
+        "charliermarsh.ruff"
+			]
+		}
+	},
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "1.3.2",
+      "ppa": "true"
+    }
+  }
+}

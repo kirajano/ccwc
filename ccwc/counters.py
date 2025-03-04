@@ -1,10 +1,12 @@
-from abc import abstractmethod
-import os
 import locale
+import os
 import sys
-import chardet
-from ccwc import SUCCESS, FILE_ERROR, STDIN_ERROR
+from abc import abstractmethod
 from typing import NamedTuple
+
+import chardet
+
+from ccwc import FILE_ERROR, STDIN_ERROR, SUCCESS
 
 
 class Response(NamedTuple):
@@ -18,7 +20,7 @@ class ContentCounter(object):
     """
     def __init__(self, user_input: str):
         self.user_input = user_input
-    
+
     @abstractmethod
     def count_content(self) -> Response:
         raise NotImplementedError("Abstract method cannot be instantiated in a base class!")
@@ -30,13 +32,13 @@ class FileContentCounter(ContentCounter):
     """
     def __init__(self, file_name: str):
         super().__init__(file_name)
-    
+
 
     def generate_path(self) -> str:
         current_path = os.getcwd()
         file_path = os.path.join(current_path, self.user_input)
         return file_path
-    
+
 
     def detect_encoding(self) -> str:
         file_path = self.generate_path()
@@ -44,7 +46,7 @@ class FileContentCounter(ContentCounter):
             content_snippet = file_reader.read(4096)
             encoding = chardet.detect(content_snippet)
             return encoding
-    
+
 
     @abstractmethod
     def read_content(self):
@@ -81,7 +83,7 @@ class FileLineCounter(FileContentCounter):
     def __init__(self, file_name: str):
         super().__init__(file_name)
 
-    
+
     def read_content(self) -> str:
         file_path = self.generate_path()
         encoding = self.detect_encoding().get('encoding')
@@ -142,7 +144,7 @@ class FileCharCounter(FileByteCounter):
         If this fails, opt for encoding of file
         """
         current_locale = locale.getlocale()[1]
-    
+
         if current_locale in self.LOCALE_SUPPORT_MULTIBYTE:
             file_path = self.generate_path()
             try:
@@ -165,7 +167,7 @@ class StdInByteCounter(ContentCounter):
         std_input = sys.stdin.buffer.read()
         super().__init__(std_input)
 
-    
+
     def count_content(self) -> int:
         try:
             return Response(len(self.user_input), SUCCESS)
@@ -180,8 +182,8 @@ class StdInLineCounter(ContentCounter):
     def __init__(self):
         std_input = sys.stdin.readlines()
         super().__init__(std_input)
-    
-    
+
+
     def count_content(self) -> int:
         try:
             return Response(len(self.user_input), SUCCESS)
@@ -195,12 +197,12 @@ class StdInWordCounter(StdInByteCounter):
     """
     def __init__(self):
         super().__init__()
-    
+
 
     def count_content(self) -> int:
         try:
             content = self.user_input
-            words = [word for word in content.split()]
+            words = list(content.split())
             return Response(len(words), SUCCESS)
         except Exception:
             return Response(0, STDIN_ERROR)
@@ -212,7 +214,7 @@ class StdInCharCounter(StdInByteCounter):
     """
     def __init__(self):
         super().__init__()
-    
+
 
     LOCALE_SUPPORT_MULTIBYTE = ["UTF-8", "ISO-8859-2", "Windows-1250"]
 

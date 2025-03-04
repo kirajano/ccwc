@@ -2,22 +2,23 @@
 Module for Application CLI
 """
 
+import sys
 from typing import Optional
+
 import typer
-from ccwc import __app_name__, __version__, ERRORS
+
+from ccwc import ERRORS, __app_name__, __version__
 from ccwc.counters import (
     ContentCounter,
-    FileByteCounter, 
-    FileLineCounter, 
-    FileWordCounter,
+    FileByteCounter,
     FileCharCounter,
+    FileLineCounter,
+    FileWordCounter,
     StdInByteCounter,
+    StdInCharCounter,
     StdInLineCounter,
     StdInWordCounter,
-    StdInCharCounter
 )
-from typing import Optional
-import sys
 
 
 def _version_callback(value: bool) -> None:
@@ -37,7 +38,7 @@ def _display_content_count(content_counter: ContentCounter) -> int:
     if error_code in ERRORS.keys():
         typer.secho(f"{ERRORS.get(error_code)}", fg=typer.colors.BRIGHT_RED)
         sys.exit(error_code)
-    
+
     return counter.content_length
 
 
@@ -51,7 +52,7 @@ def _count_bytes(file_path: Optional[str]) -> int:
         content_counter = StdInByteCounter()
 
     content_length = _display_content_count(content_counter)
-    
+
     return content_length
 
 
@@ -65,7 +66,7 @@ def _count_lines(file_path: Optional[str]) -> int:
         content_counter = StdInLineCounter()
 
     content_length = _display_content_count(content_counter)
-    
+
     return content_length
 
 
@@ -138,7 +139,7 @@ def main(
         count_file_words,
         count_file_chars
         ]
-    
+
     if not any (all_args):
         bytes_count = _count_bytes(file_path)
         lines_count = _count_lines(file_path)

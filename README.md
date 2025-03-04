@@ -1,3 +1,19 @@
+### How to run?
+To demo count the bytes in test.txt (as per org challenge) do the following:
+````
+cd ccwc
+docker build -t ccwc .
+docker run --rm ccwc
+````
+
+### How to run dev?
+Run layer from development
+````
+docker build --target dev -t ccwc:dev
+````
+
+
+
 Original Link
 https://codingchallenges.fyi/challenges/challenge-wc
 

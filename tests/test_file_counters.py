@@ -1,6 +1,6 @@
-from ccwc import cli
 from typer.testing import CliRunner
 
+from ccwc import cli
 
 runner = CliRunner()
 

@@ -8,7 +8,9 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS base
 ENV APP="ccwc" \
     PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100
+    PIP_DEFAULT_TIMEOUT=100 \
+    # Do not use venv but docker python
+    UV_SYSTEM_PYTHON=1 
 
 RUN apt-get update \
     # apt-get install <pckg1> <pckg2> \
@@ -25,16 +27,17 @@ WORKDIR /wc_tool
 ########
 FROM base AS dev
 
-# Initiate project with uv and start virtual environment
-RUN uv init $APP \
-    uv venv \
-    source .venv/bin/activate
+# Initiate project with uv (no need for `uv venv`)
+RUN uv init $APP
 
 # < Adding packages during development >
 #     1. uv add <package==xx.yy.xx>
 #     2. uv lock (after done)
 
 # < Start and develop >
+# uv run -m <module_name -flags args>
+
+ENTRYPOINT [ "bash" ]
 
 ########
 # BUILD #
@@ -60,8 +63,6 @@ RUN uv build --wheel \
 # PROD #
 ########
 FROM build as prod
-# Do not use venv but docker python
-ENV UV_SYSTEM_PYTHON=1 
 
 ENTRYPOINT [ "ccwc" ]
 CMD [ "-c", "tests/test.txt" ]
