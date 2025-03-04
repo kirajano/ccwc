@@ -37,7 +37,16 @@ RUN uv init $APP
 # < Start and develop >
 # uv run -m <module_name -flags args>
 
-ENTRYPOINT [ "bash" ]
+ARG USERNAME=developer
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && chown -R $USERNAME:$USERNAME /wc_tool
+
+USER $USERNAME
+ENV SHELL /bin/bash
 
 ########
 # BUILD #
