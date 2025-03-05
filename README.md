@@ -1,5 +1,7 @@
 [![Tests](https://github.com/kirajano/ccwc/actions/workflows/ci.yml/badge.svg)](https://github.com/kirajano/ccwc/actions/workflows/ci.yml)
 
+## CCWC
+Build your own `wc` command line tool Code Challenge by John C.
 
 ### How to run?
 To demo count the bytes in test.txt (as per org challenge) do the following:
