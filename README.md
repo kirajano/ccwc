@@ -1,3 +1,7 @@
+![CI]
+(https://github.com/kirajano/ccwc/actions/workflows/ci.yml/badge.svg)
+
+
 ### How to run?
 To demo count the bytes in test.txt (as per org challenge) do the following:
 ````
