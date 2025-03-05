@@ -1,5 +1,4 @@
-![CI]
-(https://github.com/kirajano/ccwc/actions/workflows/ci.yml/badge.svg)
+[![Tests](https://github.com/kirajano/ccwc/actions/workflows/ci.yml/badge.svg)](https://github.com/kirajano/ccwc/actions/workflows/ci.yml)
 
 
 ### How to run?
