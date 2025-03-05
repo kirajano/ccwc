@@ -7,7 +7,7 @@ Build your own `wc` command line tool Code Challenge by John C.
 To demo count the bytes in test.txt (as per org challenge) do the following:
 ````
 cd ccwc
-docker build -t ccwc .
+docker build --target prod -t ccwc .
 docker run --rm ccwc
 ````
 
