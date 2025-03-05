@@ -19,6 +19,10 @@ OR use `.devcontainer` to run in VSCode
 Original Link
 https://codingchallenges.fyi/challenges/challenge-wc
 
+
+---
+
+
 Build Your Own wc Tool
 This challenge is to build your own version of the Unix command line tool wc!
 
