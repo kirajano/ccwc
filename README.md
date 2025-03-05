@@ -12,6 +12,8 @@ Run layer from development
 docker build --target dev -t ccwc:dev
 ````
 
+OR use `.devcontainer` to run in VSCode
+
 
 
 Original Link
